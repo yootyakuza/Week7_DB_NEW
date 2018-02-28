@@ -15,10 +15,12 @@ import android.widget.TextView;
 public class CustomAdapter extends BaseAdapter {
     Context mContext;
     String[] strName;
+    String[] strPhone;
 
-    public CustomAdapter(Context mContext, String[] strName) {
+    public CustomAdapter(Context mContext, String[] strName, String[] strPhone) {
         this.mContext = mContext;
         this.strName = strName;
+        this.strPhone = strPhone;
     }
 
     @Override
@@ -41,8 +43,12 @@ public class CustomAdapter extends BaseAdapter {
         LayoutInflater mInflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(view == null)
             view = mInflater.inflate(R.layout.listview_row,parent,false);
+
         TextView textView = (TextView)view.findViewById(R.id.textView1);
         textView.setText(strName[position]);
+        TextView textView1 = (TextView)view.findViewById(R.id.textView2);
+        textView1.setText(strPhone[position]);
+
         return view;
     }
 }

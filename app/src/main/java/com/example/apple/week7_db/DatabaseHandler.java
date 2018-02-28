@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,36 +43,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if(oldVersion < 2){
+        if (oldVersion < 2) {
             db.execSQL(DATABASE_ALTER_CONTACT_1);
         }
     }
-    public void addContact(Contact contact){
+
+    public void addContact(Contact contact) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, contact._name);
         values.put(KEY_PH_NO, contact._phone_number);
 
-        long insert = db.insert(TABLE_CONTACTS, null,values);
+        long insert = db.insert(TABLE_CONTACTS, null, values);
         db.close();
     }
-    public List<Contact>getAllContacts(){
+
+    public List<Contact> getAllContacts() {
         List<Contact> contactList = new ArrayList<Contact>();
         String selectQuery = "SELECT * FROM " + TABLE_CONTACTS;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if(cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 Contact contact = new Contact();
                 contact._id = Integer.parseInt(cursor.getString(0));
                 contact._name = cursor.getString(1);
                 contact._phone_number = cursor.getString(2);
                 contactList.add(contact);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
         return contactList;
+    }
+
+    public int updateContact(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME, contact._name);
+        values.put(KEY_PH_NO, contact._phone_number);
+
+        //updating row
+        return  db.update(
+                TABLE_CONTACTS,
+                values,
+                KEY_ID + "=  ?",
+                new String[]{String.valueOf(contact._id)}
+        );
+    }
+    public void deleteContact(Contact contact){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(
+                TABLE_CONTACTS,
+                KEY_ID + " = ?",
+                new String[] {String.valueOf(contact._id)}
+        );
     }
 }

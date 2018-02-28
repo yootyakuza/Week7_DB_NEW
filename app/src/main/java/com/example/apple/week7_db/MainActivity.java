@@ -24,11 +24,16 @@ public class MainActivity extends AppCompatActivity {
         t.show();
 
         String[] datas = new String[contacts.size()];
+
+        String[] datas1 = new String[contacts.size()];
         for (int i = 0; i < datas.length; i++) {
             datas[i] = contacts.get(i)._name;
         }
+        for (int i = 0; i < datas1.length; i++) {
+            datas1[i] = contacts.get(i)._phone_number;
+        }
 
-        CustomAdapter adapter = new CustomAdapter(getApplicationContext(), datas);
+        CustomAdapter adapter = new CustomAdapter(getApplicationContext(), datas,datas1);
         ListView listView = (ListView) findViewById(R.id.ListView1);
         listView.setAdapter(adapter);
     }
